@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taco Clicker - Retro UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background-color: #F4EBE1;
+            background-image: radial-gradient(#d5cdc4 1px, transparent 1px);
+            background-size: 20px 20px;
+            font-family: 'Space Mono', monospace;
+            color: #1a1a1a;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        .pixel-font {
+            font-family: 'VT323', monospace;
+        }
+
+        .retro-window {
+            background-color: #FAFAFA;
+            border: 2px solid #000;
+            border-radius: 8px;
+            box-shadow: 6px 6px 0px #000;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: transform 0.1s ease;
+        }
+
+        .retro-header {
+            background-color: #FAFAFA;
+            border-bottom: 2px solid #000;
+            padding: 4px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 6px;
+        }
+
+        .window-btn {
+            width: 12px;
+            height: 12px;
+            border: 2px solid #000;
+            border-radius: 50%;
+            background-color: transparent;
+        }
+
+        .retro-btn {
+            background-color: #E8A5C8;
+            border: 2px solid #000;
+            border-radius: 20px;
+            box-shadow: 3px 3px 0px #000;
+            padding: 8px 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        .retro-btn:active {
+            transform: translate(3px, 3px);
+            box-shadow: 0px 0px 0px #000;
+        }
+
+        .retro-btn:disabled {
+            background-color: #d1d5db;
+            color: #9ca3af;
+            cursor: not-allowed;
+            box-shadow: 3px 3px 0px #6b7280;
+            border-color: #6b7280;
+        }
+
+        .retro-btn:disabled:active {
+            transform: none;
+            box-shadow: 3px 3px 0px #6b7280;
+        }
+
+        #taco-btn {
+            font-size: 8rem;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.05s ease;
+            filter: drop-shadow(4px 4px 0px rgba(0, 0, 0, 0.2));
+        }
+
+        #taco-btn:active {
+            transform: scale(0.9);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #fff;
+            border: 2px solid #000;
+            box-shadow: 4px 4px 0px #000;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transform: translateY(150%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 50;
+            font-weight: bold;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+        }
+
+        .connector-line {
+            position: absolute;
+            background-color: #000;
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen p-4 md:p-8 flex flex-col items-center justify-center">
+
+    <div class="text-center mb-8">
+        <h1
+            class="text-6xl md:text-8xl tracking-widest text-[#1a1a1a] drop-shadow-[4px_4px_0px_#E8A5C8] font-bold uppercase">
+            Taco Clicker
+        </h1>
+        <p class="mt-2 text-sm md:text-base bg-black text-white px-4 py-1 inline-block rounded-full">
+            BY: @TACO_DEV
+        </p>
+    </div>
+
+    <div class="max-w-6xl w-full grid grid-cols-1 md:grid-cols-12 gap-6 relative">
+
+        <div class="md:col-span-3 flex flex-col gap-6">
+            <div class="retro-window">
+                <div class="retro-header">
+                    <div class="window-controls">
+                        <div class="window-btn"></div>
+                        <div class="window-btn"></div>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider">Info</span>
+                </div>
+                <div class="p-4 bg-[#Fdfbf9]">
+                    <div class="flex items-start gap-3">
+                        <span class="text-2xl">⚠️</span>
+                        <p class="text-xs leading-relaxed">
+                            Haz clic en el taco gigante para ganar tacos. Usa tus tacos para comprar mejoras en la
+                            tienda.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="retro-window">
+                <div class="retro-header">
+                    <div class="window-controls">
+                        <div class="window-btn"></div>
+                        <div class="window-btn"></div>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider">Mejoras</span>
+                </div>
+                <div class="p-4 flex flex-col gap-4 bg-[#Fdfbf9]">
+
+                    <div class="border-2 border-black p-3 rounded-lg bg-white relative">
+                        <h3 class="font-bold text-sm mb-1 pixel-font text-xl">Salsa Extra</h3>
+                        <p class="text-[10px] text-gray-600 mb-3">+1 Taco por Clic</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold" id="cost-click">Costo: 50 🌮</span>
+                            <button id="btn-upgrade-click" class="retro-btn bg-[#B5D8CE]">Comprar</button>
+                        </div>
+                    </div>
+
+                    <div class="border-2 border-black p-3 rounded-lg bg-white relative">
+                        <h3 class="font-bold text-sm mb-1 pixel-font text-xl">Taquero Auto</h3>
+                        <p class="text-[10px] text-gray-600 mb-3">+1 Taco por Segundo</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold" id="cost-auto">Costo: 100 🌮</span>
+                            <button id="btn-upgrade-auto" class="retro-btn bg-[#F3C58B]">Comprar</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="md:col-span-6 flex flex-col justify-center">
+            <div class="retro-window shadow-[8px_8px_0px_#000] border-4 min-h-[400px]">
+                <div class="retro-header border-b-4">
+                    <div class="window-controls">
+                        <div class="window-btn border-2"></div>
+                        <div class="window-btn border-2"></div>
+                    </div>
+                    <span class="text-sm font-bold uppercase tracking-widest px-2">Main.exe</span>
+                    <div class="w-6"></div>
+                </div>
+
+                <div class="flex-1 flex flex-col items-center justify-center p-8 bg-[#FAF6F0] relative overflow-hidden">
+                    <div class="absolute top-4 right-4 text-gray-300 text-6xl opacity-20 pixel-font">#01</div>
+
+                    <div class="text-center mb-8 z-10">
+                        <h2 class="text-2xl font-bold uppercase tracking-widest text-gray-600 pixel-font">Tacos</h2>
+                        <div id="taco-counter"
+                            class="text-6xl md:text-8xl font-bold pixel-font drop-shadow-[2px_2px_0px_#E8A5C8]">
+                            0
+                        </div>
+                    </div>
+
+                    <div id="taco-btn" class="z-10 hover:scale-105 transition-transform">
+                        🌮
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="md:col-span-3 flex flex-col gap-6">
+
+            <div class="retro-window">
+                <div class="retro-header">
+                    <div class="window-controls">
+                        <div class="window-btn"></div>
+                        <div class="window-btn"></div>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider">Estadísticas</span>
+                </div>
+                <div class="p-4 bg-[#Fdfbf9]">
+                    <ul class="text-xs space-y-3">
+                        <li class="flex justify-between border-b-2 border-dotted border-gray-300 pb-1">
+                            <span>Tacos por Clic:</span>
+                            <span id="stat-tpc" class="font-bold">1</span>
+                        </li>
+                        <li class="flex justify-between border-b-2 border-dotted border-gray-300 pb-1">
+                            <span>Tacos por Segundo:</span>
+                            <span id="stat-tps" class="font-bold">0</span>
+                        </li>
+                        <li class="flex justify-between pb-1">
+                            <span>Tacos Totales:</span>
+                            <span id="stat-total" class="font-bold">0</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="retro-window">
+                <div class="retro-header">
+                    <div class="window-controls">
+                        <div class="window-btn"></div>
+                        <div class="window-btn"></div>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider">Ajustes</span>
+                </div>
+                <div class="p-4 flex flex-col items-center text-center gap-3 bg-[#Fdfbf9]">
+                    <span class="text-4xl text-[#E8A5C8]">🎧</span>
+                    <p class="text-[10px] leading-tight">
+                        Puedes usar audífonos -------.
+                    </p>
+                    <button class="retro-btn w-full bg-white"
+                        onclick="showToast('¡Configuración guardada!')">Configurar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="toast" class="toast text-sm">
+        Mensaje aquí
+    </div>
+
+    <script>
+        let tacos = 0;
+        let totalTacos = 0;
+        let tacosPerClick = 1;
+        let tacosPerSecond = 0;
+
+        let costClick = 50;
+        let costAuto = 100;
+
+        const tacoBtn = document.getElementById('taco-btn');
+        const counterEl = document.getElementById('taco-counter');
+
+        const btnUpgradeClick = document.getElementById('btn-upgrade-click');
+        const btnUpgradeAuto = document.getElementById('btn-upgrade-auto');
+
+        const costClickEl = document.getElementById('cost-click');
+        const costAutoEl = document.getElementById('cost-auto');
+
+        const statTpc = document.getElementById('stat-tpc');
+        const statTps = document.getElementById('stat-tps');
+        const statTotal = document.getElementById('stat-total');
+
+        const toastEl = document.getElementById('toast');
+
+        tacoBtn.addEventListener('click', (e) => {
+            addTacos(tacosPerClick);
+            createFloatingText(e.clientX, e.clientY, `+${tacosPerClick}`);
+        });
+
+
+        btnUpgradeClick.addEventListener('click', () => {
+            if (tacos >= costClick) {
+                tacos -= costClick;
+                tacosPerClick += 1;
+                costClick = Math.floor(costClick * 1.5);
+                updateUI();
+                showToast('¡Salsa Extra Comprada!');
+            }
+        });
+
+        btnUpgradeAuto.addEventListener('click', () => {
+            if (tacos >= costAuto) {
+                tacos -= costAuto;
+                tacosPerSecond += 1;
+                costAuto = Math.floor(costAuto * 1.5); // 
+                updateUI();
+                showToast('¡Taquero Auto Contratado!');
+            }
+        });
+
+        function addTacos(amount) {
+            tacos += amount;
+            totalTacos += amount;
+            updateUI();
+        }
+
+        function updateUI() {
+            counterEl.innerText = Math.floor(tacos);
+
+            statTpc.innerText = tacosPerClick;
+            statTps.innerText = tacosPerSecond;
+            statTotal.innerText = Math.floor(totalTacos);
+
+            costClickEl.innerText = `Costo: ${costClick} 🌮`;
+            costAutoEl.innerText = `Costo: ${costAuto} 🌮`;
+
+            btnUpgradeClick.disabled = tacos < costClick;
+            btnUpgradeAuto.disabled = tacos < costAuto;
+        }
+
+        setInterval(() => {
+            if (tacosPerSecond > 0) {
+                addTacos(tacosPerSecond / 10);
+            }
+        }, 100);
+
+        function createFloatingText(x, y, text) {
+            const el = document.createElement('div');
+            el.innerText = text;
+            el.className = 'absolute font-bold text-lg pixel-font drop-shadow-md z-50 pointer-events-none';
+            el.style.left = `${x}px`;
+            el.style.top = `${y}px`;
+            el.style.color = '#E8A5C8';
+
+            document.body.appendChild(el);
+
+            // Animate
+            let opacity = 1;
+            let currentY = y;
+            const animate = () => {
+                currentY -= 2;
+                opacity -= 0.02;
+                el.style.top = `${currentY}px`;
+                el.style.opacity = opacity;
+
+                if (opacity > 0) {
+                    requestAnimationFrame(animate);
+                } else {
+                    el.remove();
+                }
+            };
+            requestAnimationFrame(animate);
+        }
+
+        let toastTimeout;
+        window.showToast = function (msg) {
+            toastEl.innerText = msg;
+            toastEl.classList.add('show');
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toastEl.classList.remove('show');
+            }, 3000);
+        }
+
+        updateUI();
+
+    </script>
+</body>
+
+</html>
